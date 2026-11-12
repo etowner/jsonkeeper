@@ -1,10 +1,12 @@
 'use strict';
 
-// Clean (bug-free) newsletter endpoint. With no WEBUS_BUGS flags set it only
+// Newsletter endpoint. With no WEBUS_BUGS flags set it only
 //   POST /newsletter/subscribe     writes newsletter.e_mail
+// With `promo` (paper Ex 1) it also reads tickets.e_mail and tickets.date, for marketing.
 
 const uuid = require('uuid');
 const store = require('../store');
+const bugOn = require('../bugs').bugOn;
 
 const db = store.db;
 
@@ -28,6 +30,22 @@ module.exports = {
 
     db.newsletter.push(subscription);
     store.save();
-    res.status(200).json({ subscribedEmail: subscription });
+
+    if (!bugOn('promo')) {
+      res.status(200).json({ subscribedEmail: subscription }); return;
+    }
+
+    // BUG promo: reuse ticket data for marketing. Kept faithful to the original's
+    // `new Date(2020)`, which is 2020 ms after the epoch (1970), not the year 2020,
+    // so every ticket counts.
+    const tickets = db.tickets.filter(function (ticket) {
+      return ticket.e_mail === e_mail && new Date(ticket.date) >= new Date(2020);
+    });
+    if (tickets.length >= 10) {
+      console.log('Send Promo Code');
+      res.status(200).json({ subscribedEmail: subscription, frequentTraveler: true });
+    } else {
+      res.status(200).json({ subscribedEmail: subscription, frequentTraveler: false });
+    }
   },
 };

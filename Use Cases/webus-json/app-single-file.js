@@ -8,6 +8,10 @@
 //   switch or spread: its normalizer silently drops those nodes.
 // - No regex constants: `CONST.test(x)` crashes its dependency builder, and
 //   parser.js catches the crash and writes an empty graph. Inline regexes are fine.
+//
+// Phase 3 bug flags (WEBUS_BUGS=promo,travelers,inject) work as in bugs.js.
+// The inject bug's syntax errors reach the error handler at the bottom
+// instead of a try block, which the analyzer would drop.
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -18,6 +22,12 @@ const db = store.db;
 
 function trim(value) {
   return typeof value === 'string' ? value.trim() : value;
+}
+
+function bugOn(name) {
+  return (process.env.WEBUS_BUGS || '').split(',').map(function (flag) {
+    return flag.trim();
+  }).indexOf(name) !== -1;
 }
 
 function isIsoDate(value) {
@@ -33,6 +43,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 router.get('/tickets/schedules', function (req, res) {
+  if (bugOn('travelers')) {
+    res.status(200).json(db.schedules); return;
+  }
+
   const schedules = db.schedules.map(function (schedule) {
     return { destination: schedule.destination, date: schedule.date };
   });
@@ -66,16 +80,35 @@ router.post('/tickets/buy_ticket', function (req, res) {
   };
 
   db.tickets.push(ticket);
+
+  if (!bugOn('travelers')) {
+    store.save();
+    res.status(200).json({ createdTicket: ticket }); return;
+  }
+
+  const trip = db.schedules.filter(function (s) {
+    return s.destination === destination && s.date === schedule;
+  })[0];
+  const updatedSchedule = trip ? JSON.parse(JSON.stringify(trip)) : null;
+  if (trip) trip.travelers.push(name);
   store.save();
-  res.status(200).json({ createdTicket: ticket });
+  res.status(200).json({ createdTicket: ticket, updatedSchedule: updatedSchedule });
 });
 
 router.get('/tickets/purchase_history', function (req, res) {
   const name = req.query.name;
 
-  const tickets = db.tickets.filter(function (ticket) {
-    return ticket.name === name;
-  }).map(function (ticket) {
+  let matches;
+  if (bugOn('inject')) {
+    const where = new Function("return this.name === '" + name + "'");
+    matches = db.tickets.filter(function (ticket) { return where.call(ticket); });
+  } else {
+    matches = db.tickets.filter(function (ticket) {
+      return ticket.name === name;
+    });
+  }
+
+  const tickets = matches.map(function (ticket) {
     return { name: ticket.name, destination: ticket.destination, date: ticket.date };
   });
   res.status(200).json(tickets);
@@ -98,9 +131,27 @@ router.post('/newsletter/subscribe', function (req, res) {
 
   db.newsletter.push(subscription);
   store.save();
-  res.status(200).json({ subscribedEmail: subscription });
+
+  if (!bugOn('promo')) {
+    res.status(200).json({ subscribedEmail: subscription }); return;
+  }
+
+  const tickets = db.tickets.filter(function (ticket) {
+    return ticket.e_mail === e_mail && new Date(ticket.date) >= new Date(2020);
+  });
+  if (tickets.length >= 10) {
+    console.log('Send Promo Code');
+    res.status(200).json({ subscribedEmail: subscription, frequentTraveler: true });
+  } else {
+    res.status(200).json({ subscribedEmail: subscription, frequentTraveler: false });
+  }
 });
 
 app.use(router);
+
+// Only the inject bug throws: its filter code can fail to compile or run.
+app.use('/tickets/purchase_history', function (err, req, res, next) {
+  res.status(400).json('Error fetching ticket history.');
+});
 
 module.exports = app;

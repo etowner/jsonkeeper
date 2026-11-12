@@ -1,13 +1,18 @@
 'use strict';
 
-// Clean (bug-free) ticket endpoints. Phase 3 adds the original's bugs behind
-// WEBUS_BUGS flags; with no flags set, each endpoint touches only:
+// Ticket endpoints. With no WEBUS_BUGS flags set, each endpoint touches only:
 //   GET  /tickets/schedules        reads schedules.destination, date
 //   POST /tickets/buy_ticket       writes tickets.*
 //   GET  /tickets/purchase_history reads tickets.name, destination, date
+// The original's bugs (see bugs.js):
+//   travelers (paper Ex 2) buy_ticket also writes schedules.travelers, and
+//                          schedules returns whole schedules, travelers included
+//   inject    (paper Ex 3) purchase_history runs the user's text as code, which
+//                          can read any ticket field, credit_card included
 
 const uuid = require('uuid');
 const store = require('../store');
+const bugOn = require('../bugs').bugOn;
 
 const db = store.db;
 
@@ -27,6 +32,11 @@ function isIsoDate(value) {
 module.exports = {
 
   seeSchedules(req, res) {
+    // BUG travelers: the original returned whole schedules, travelers included
+    if (bugOn('travelers')) {
+      res.status(200).json(db.schedules); return;
+    }
+
     // Return all schedules from all time, without the travelers list
     const schedules = db.schedules.map(function (schedule) {
       return { destination: schedule.destination, date: schedule.date };
@@ -63,17 +73,46 @@ module.exports = {
     };
 
     db.tickets.push(ticket);
+
+    if (!bugOn('travelers')) {
+      store.save();
+      res.status(200).json({ createdTicket: ticket }); return;
+    }
+
+    /* BUG travelers: add new traveler to trip. Like Mongoose's findOneAndUpdate,
+       answer with the schedule as it was before the update, or null if none matched. */
+    const trip = db.schedules.filter(function (s) {
+      return s.destination === destination && s.date === schedule;
+    })[0];
+    const updatedSchedule = trip ? JSON.parse(JSON.stringify(trip)) : null;
+    if (trip) trip.travelers.push(name);
     store.save();
-    res.status(200).json({ createdTicket: ticket });
+    res.status(200).json({ createdTicket: ticket, updatedSchedule: updatedSchedule });
   },
 
   seePurchaseHistory(req, res) {
     const name = req.query.name;
 
-    // Plain equality filter on name; return only name, destination and date
-    const tickets = db.tickets.filter(function (ticket) {
-      return ticket.name === name;
-    }).map(function (ticket) {
+    // BUG inject: the original's {$where: "this.name === '" + name + "'"}
+    // run as JavaScript with each ticket as `this`. The projection still hides
+    // credit_card, but injected code can read it and leak it one guess at a time.
+    let matches;
+    if (bugOn('inject')) {
+      try {
+        const where = new Function("return this.name === '" + name + "'");
+        matches = db.tickets.filter(function (ticket) { return where.call(ticket); });
+      } catch (err) {
+        res.status(400).json('Error fetching ticket history.'); return;
+      }
+    } else {
+      // Plain equality filter on name
+      matches = db.tickets.filter(function (ticket) {
+        return ticket.name === name;
+      });
+    }
+
+    // Return only name, destination and date
+    const tickets = matches.map(function (ticket) {
       return { name: ticket.name, destination: ticket.destination, date: ticket.date };
     });
     res.status(200).json(tickets);
