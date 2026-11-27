@@ -1,0 +1,19 @@
+{
+  "name": "webus-json",
+  "version": "1.0.0",
+  "description": "Webus bus-ticket app on a JSON file instead of MongoDB: the plain baseline JSONKeeper wraps",
+  "scripts": {
+    "start": "node bin/www",
+    "start2": "node bin/www2",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "uuid": "^8.3.2"
+  }
+}

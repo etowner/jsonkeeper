@@ -1,0 +1,240 @@
+{
+  "tickets": [
+    {
+      "_id": "61f496e3-e90d-491d-8f25-121966800793",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Porto",
+      "date": "2021-03-12",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "a853db89-f175-4fac-8c8a-30f3469c8669",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Faro",
+      "date": "2021-08-02",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "2f8c192d-af50-4067-9c2c-b3ce3a6c36c6",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Coimbra",
+      "date": "2022-01-20",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "e86b04ba-7f5d-463f-b847-d12092b5deb4",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Porto",
+      "date": "2022-06-11",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "bafaedd5-ee17-43a3-9618-f9ea0af88a5a",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Braga",
+      "date": "2023-02-14",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "e07aa225-5e1f-40d1-9065-d5ac488e5407",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Faro",
+      "date": "2023-07-30",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "8c47b078-570d-4a7e-ad6a-d7f44ed49e55",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Porto",
+      "date": "2024-04-05",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "918c4838-030a-4ed8-8bdd-72a373b5d222",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Coimbra",
+      "date": "2024-10-19",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "5337f33c-b8ce-49eb-8a68-9f43126a9657",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Porto",
+      "date": "2025-05-22",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "2e77b8ee-eccb-48ad-a437-5478aaa3ded3",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Faro",
+      "date": "2025-12-23",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "0195fb75-da5e-4db1-a91e-10f7bf05b8eb",
+      "name": "João Costa",
+      "e_mail": "joao.costa@example.com",
+      "destination": "Braga",
+      "date": "2026-09-08",
+      "credit_card": "4111111111111111"
+    },
+    {
+      "_id": "844e9e2c-d049-497e-ac72-c4fc3a6881c8",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Coimbra",
+      "date": "2018-04-17",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "fbdf73af-f49e-41ec-bbf1-698bfe3c7415",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Porto",
+      "date": "2019-01-09",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "337939ed-e9f7-4425-8dff-b2a91cdbb1d7",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Faro",
+      "date": "2019-08-21",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "789e2f52-b59e-459f-81da-7b4d2f9cac9b",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Porto",
+      "date": "2021-02-03",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "9bb9cd1f-597f-4813-8a68-1f288a438254",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Braga",
+      "date": "2021-11-27",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "94db80f3-5fd4-4d07-b351-c9dd0c33ce90",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Coimbra",
+      "date": "2022-09-15",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "b4daa716-3f7a-4a1d-9314-a78e8dd7d56a",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Porto",
+      "date": "2023-03-30",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "cde96ca1-69f9-4f7c-a4a6-b01a855c4849",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Faro",
+      "date": "2024-07-12",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "11d647a5-d6de-46b2-992c-ab35dbaf381c",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Porto",
+      "date": "2025-01-18",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "d78ad7da-4d92-456d-b0db-d0b88ae291c6",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Braga",
+      "date": "2025-10-04",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "8da1677d-9ade-4508-89b6-dbadd9897bb0",
+      "name": "Rui Santos",
+      "e_mail": "rui.santos@example.com",
+      "destination": "Coimbra",
+      "date": "2026-06-26",
+      "credit_card": "5555555555554444"
+    },
+    {
+      "_id": "75cfcc60-f28c-4b31-9795-af072c798cce",
+      "name": "Ana Pereira",
+      "e_mail": "ana.pereira@example.com",
+      "destination": "Faro",
+      "date": "2025-07-14",
+      "credit_card": "378282246310005"
+    },
+    {
+      "_id": "f1ba12fb-37f1-41bc-ac46-e10f5e470cbe",
+      "name": "Ana Pereira",
+      "e_mail": "ana.pereira@example.com",
+      "destination": "Porto",
+      "date": "2026-12-01",
+      "credit_card": "378282246310005"
+    }
+  ],
+  "schedules": [
+    {
+      "_id": "cdf8e1c5-a22d-44e8-adcc-384177893005",
+      "destination": "Porto",
+      "date": "2026-12-01",
+      "travelers": []
+    },
+    {
+      "_id": "9419e8e9-7769-48c2-bf66-e6d4d97c0f7a",
+      "destination": "Porto",
+      "date": "2026-12-15",
+      "travelers": []
+    },
+    {
+      "_id": "d1baf71e-21f1-4ec4-8d7c-c09961f37f18",
+      "destination": "Coimbra",
+      "date": "2026-12-03",
+      "travelers": []
+    },
+    {
+      "_id": "c1150287-caa1-4db7-9005-bb2a0c23dcca",
+      "destination": "Faro",
+      "date": "2026-12-10",
+      "travelers": []
+    },
+    {
+      "_id": "c1c0161e-68b5-49e6-b243-18acbdae7182",
+      "destination": "Braga",
+      "date": "2026-12-20",
+      "travelers": []
+    },
+    {
+      "_id": "67d1f295-adaa-4338-bd82-4a79221208ec",
+      "destination": "Faro",
+      "date": "2027-01-05",
+      "travelers": []
+    }
+  ],
+  "newsletter": [
+    {
+      "_id": "a493149f-fa7b-4def-afce-ff4b6deb6b41",
+      "e_mail": "ana.pereira@example.com"
+    }
+  ]
+}
