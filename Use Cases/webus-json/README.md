@@ -58,7 +58,7 @@ request, so tests can change them without reloading the app.
 
 | Flag        | Behavior when on |
 | ----------- | ---------------- |
-| `promo`     | `subscribe` also reads `tickets.e_mail` and `tickets.date` to flag frequent travelers (10 or more tickets). That reuses ticket data for marketing. |
+| `promo`     | `subscribe` also reads `tickets.e_mail` and `tickets.date` to flag frequent travelers (10 or more tickets). That reuses ticket data for marketing. The date check keeps the original's `new Date(2020)`, which is 2020 ms after 1970, not the year 2020, so every ticket counts. In the seed data Rui Santos has 11 tickets but only 8 from 2020 on, so he is flagged; `test/bugs.test.js` checks this. |
 | `travelers` | `buy_ticket` also appends the buyer's name to `schedules.travelers`, and `GET /tickets/schedules` returns the whole schedule, so other travelers' names leak. |
 | `inject`    | `purchase_history` builds its filter from the `name` query with `new Function`, the JSON equivalent of Mongo's `$where`. Injected code can read any ticket field, including `credit_card`. |
 
