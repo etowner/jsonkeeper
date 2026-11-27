@@ -1,3 +1,8 @@
+// Modified for JSONKeeper from RuleKeeper's Use Cases/webus/<FILE>.
+// Original: Copyright 2023 Mafalda Ferreira, Apache License 2.0
+// (https://github.com/mafsbaptista/rulekeeper). See NOTICE at the repository root.
+// Changes: Rewritten for the JSON file store. The original's promo bug is behind the WEBUS_BUGS promo flag.
+
 'use strict';
 
 // Newsletter endpoint. With no WEBUS_BUGS flags set it only

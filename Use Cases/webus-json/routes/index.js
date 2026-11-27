@@ -1,3 +1,8 @@
+// Modified for JSONKeeper from RuleKeeper's Use Cases/webus/<FILE>.
+// Original: Copyright 2023 Mafalda Ferreira, Apache License 2.0
+// (https://github.com/mafsbaptista/rulekeeper). See NOTICE at the repository root.
+// Changes: Serves the static views/index.html instead of rendering the pug view, and the cookie helpers are removed.
+
 const express = require('express');
 const path = require('path');
 

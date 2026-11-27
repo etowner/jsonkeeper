@@ -1,3 +1,9 @@
+// Modified for JSONKeeper from RuleKeeper's Use Cases/webus/<FILE>.
+// Original: Copyright 2023 Mafalda Ferreira, Apache License 2.0
+// (https://github.com/mafsbaptista/rulekeeper). See NOTICE at the repository root.
+// Changes: Rewritten to use the JSON file store (store.js) instead of Mongoose and RuleKeeper's middleware. 
+// The original's privacy bugs are behind WEBUS_BUGS flags.
+
 // All four endpoints in one file, for the static analyzer. Behaves the same as
 // app.js (test/endpoints.test.js runs against both), so keep the two in sync.
 //

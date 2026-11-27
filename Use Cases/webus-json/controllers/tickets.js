@@ -1,3 +1,9 @@
+// Modified for JSONKeeper from RuleKeeper's Use Cases/webus/<FILE>.
+// Original: Copyright 2023 Mafalda Ferreira, Apache License 2.0
+// (https://github.com/mafsbaptista/rulekeeper). See NOTICE at the repository root.
+// Changes: Rewritten for the JSON file store.
+//  The original's travelers and injection bugs are behind the WEBUS_BUGS travelers and inject flags.
+
 'use strict';
 
 // Ticket endpoints. With no WEBUS_BUGS flags set, each endpoint touches only:

@@ -1,9 +1,17 @@
 # webus-json
 
-Webus is a small bus-ticket Express app. This version keeps its data in a JSON
-file instead of MongoDB. It is the unprotected baseline that JSONKeeper wraps:
-no access controls are added, and the app's privacy bugs can be switched on
-with flags.
+Webus is a small bus-ticket Express app. This version keeps its data in a JSON file instead of MongoDB. It is the unprotected baseline that JSONKeeper wraps: no access controls are added, and the app's privacy bugs can be switched on with flags.
+
+## Origin and license
+
+webus-json is adapted from Webus, the bus-ticket use case in [RuleKeeper](https://github.com/mafsbaptista/rulekeeper) (`Use Cases/webus/`),
+Copyright 2023 Mafalda Ferreira and licensed under the [Apache License 2.0](../../LICENSE). See [NOTICE](../../NOTICE).
+
+- **Modified from Webus:** `app.js`, `app-single-file.js`, `bin/www`, `bin/www2`,
+  `controllers/newsletter.js`, `controllers/tickets.js`, `routes/index.js`,
+  `views/index.html` (from `index.pug`) and `package.json`.
+- **Copied unchanged:** `controllers/index.js`, `routes/newsletter.js`, `routes/tickets.js`.
+- **New for JSONKeeper:** `store.js`, `bugs.js`, `db.seed.json`, `test/` and this README.
 
 ## Endpoints
 
@@ -15,10 +23,7 @@ with flags.
 | GET    | `/tickets/purchase_history` | Lists a person's tickets (`?name=`)               | reads `tickets.name`, `destination`, `date` |
 | POST   | `/newsletter/subscribe`     | Adds an e-mail to the newsletter                  | writes `newsletter.e_mail`             |
 
-`buy_ticket` expects a JSON or form body with `name`, `e_mail`, `credit_card`
-(digits only), `destination` and `schedule` (an ISO date such as `2026-12-01`).
-Missing fields return 400 "Missing information"; invalid values return 400
-"Error buying ticket."
+`buy_ticket` expects a JSON or form body with `name`, `e_mail`, `credit_card` (digits only), `destination` and `schedule` (an ISO date such as `2026-12-01`). Missing fields return 400 "Missing information"; invalid values return 400" Error buying ticket."
 
 ## Layout
 
