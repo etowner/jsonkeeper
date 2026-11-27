@@ -85,7 +85,7 @@ module.exports = {
       return s.destination === destination && s.date === schedule;
     })[0];
     const updatedSchedule = trip ? JSON.parse(JSON.stringify(trip)) : null;
-    if (trip) trip.travelers.push(name);
+    if (trip) { trip.travelers.push(name); }
     store.save();
     res.status(200).json({ createdTicket: ticket, updatedSchedule: updatedSchedule });
   },
