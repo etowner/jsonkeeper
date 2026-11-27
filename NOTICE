@@ -1,0 +1,16 @@
+JSONKeeper
+Copyright 2026 The JSONKeeper Authors
+
+This product includes software from RuleKeeper
+(https://github.com/mafsbaptista/rulekeeper),
+Copyright 2023 Mafalda Ferreira,
+licensed under the Apache License, Version 2.0.
+
+RuleKeeper is described in:
+M. Ferreira, T. Brito, J. Fragoso Santos and N. Santos,
+"RuleKeeper: GDPR-Aware Personal Data Compliance for Web Frameworks,"
+2023 IEEE Symposium on Security and Privacy (SP).
+https://doi.org/10.1109/SP46215.2023.10179395
+
+Files taken from RuleKeeper keep their original copyright. Files we have
+modified carry a notice at the top stating that they were changed.
