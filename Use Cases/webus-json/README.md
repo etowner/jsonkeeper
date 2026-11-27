@@ -36,7 +36,8 @@ Missing fields return 400 "Missing information"; invalid values return 400
   the `router.get`/`router.post` literal and ignores `app.use` prefixes. `bin/www2`
   starts this version.
 - `bugs.js`: reads the `WEBUS_BUGS` environment variable.
-- `test/`: store, endpoint and bug tests.
+- `test/`: store, endpoint and bug tests, plus the analyzer checks described
+  under [What the analyzer sees](#what-the-analyzer-sees).
 
 ## Running
 
@@ -68,9 +69,58 @@ WEBUS_BUGS=promo,travelers,inject npm start   # reproduces the original app
 The `inject` flag runs user input as code. Use it only locally with the
 seed data.
 
+## What the analyzer sees
+
+`test/bug-flows.test.js` runs the static analyzer on `app-single-file.js` and
+lists, per route, the `store.db` fields its graph shows being read and
+written. Static analysis sees every branch, so the bug code is always in the
+graph, whatever `WEBUS_BUGS` is set to.
+
+| Route | Plain app | Added by the bug code |
+| ----- | --------- | --------------------- |
+| GET `/tickets/schedules` | reads `schedules.destination`, `date` | `travelers`: the whole schedule (`schedules.*`) goes into the response |
+| POST `/tickets/buy_ticket` | writes `tickets._id`, `name`, `e_mail`, `destination`, `date`, `credit_card` | `travelers`: reads `schedules.destination`, `date`, `travelers`; writes `schedules.travelers`; the whole schedule goes into the response |
+| GET `/tickets/purchase_history` | reads `tickets.name`, `destination`, `date` | `inject`: dynamic code built from request input; whole tickets (`tickets.*`) passed to it |
+| POST `/newsletter/subscribe` | writes `newsletter._id`, `e_mail` | `promo`: reads `tickets.e_mail`, `date` |
+
+Running the same check on the phase 2 version (before the bugs) gives only
+the "Plain app" column.
+
+How it works (`test/helpers/flows.js`):
+
+- `Static Analysis Engine/queries/rulekeeper.py` only follows
+  `require('mongoose')` and model calls such as `find` and `create`, so on this
+  app it finds no data operations at all. `flows.js` does the same job for
+  `store.db`, reading the analyzer's CSV output directly. It does not need neo4j.
+- The collections come from the analyzer's PDG: the `LOOKUP` edges out of the
+  object created for `const db = store.db`.
+- The rest follows the analyzer's normalized AST, resolving names by scope.
+  The PDG has no edge from `v = db.tickets` to the `v.filter` after it, none for
+  a variable assigned later (`matches = ...`), and it does not tie a
+  `.filter(function (ticket) {...})` callback's parameter to its collection.
+
+Known limits:
+
+- `buy_ticket` writes `schedules.travelers` inside `if (trip) { ... }`. The
+  braces are needed: in a brace-less `if` the normalizer keeps only the first
+  statement it splits the body into, so the push would be dropped from the
+  graph. `test/bug-flows.test.js` checks both the write and that quirk.
+- For `inject`, static analysis shows whole tickets reaching code built from
+  the request, but not which fields an injected string would read, such as
+  `credit_card`.
+
 ## Notes
 
 - The analyzer crashes on `.test()` called on a regex constant, so the code
   uses inline regexes only.
+- It crashes the same way on a call or property read on a value set by `||`,
+  such as `(process.env.WEBUS_BUGS || '').split(',')`. Store
+  `obj.prop` in a `const` and test that instead.
+- The analyzer exits 0 even when it crashes, writing CSVs with only a header
+  row. `test/analyzer.test.js` runs it on `app-single-file.js` and checks the
+  graph. Run `npm install` in `Static Analysis Engine/parser` first, or the
+  analyzer tests are skipped.
+- In an `if` with no braces, the normalizer keeps only the first statement it
+  splits the body into. Use braces when the body is more than one simple step.
 - `store.js` must stay parseable by Esprima 4.0.1: no `?.`, `??`, object
   spread, or rest in destructuring.

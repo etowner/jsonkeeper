@@ -8,6 +8,14 @@
 //   switch or spread: its normalizer silently drops those nodes.
 // - No regex constants: `CONST.test(x)` crashes its dependency builder, and
 //   parser.js catches the crash and writes an empty graph. Inline regexes are fine.
+// - No calls or property reads on a value set by `a || b`, such
+//   as `(x || '').split()`: same crash (dep_builder.js expects such a variable
+//   to hold `obj.prop`). Store `obj.prop` in a const and test it instead.
+//   test/analyzer.test.js catches this, since the analyzer still exits 0.
+// - Braces on an `if` whose body is more than one simple step: without them the
+//   normalizer keeps only the first statement it splits the body into, so
+//   `if (trip) trip.travelers.push(name);` loses the push. test/bug-flows.test.js
+//   checks that the travelers write is in the graph.
 //
 // Phase 3 bug flags (WEBUS_BUGS=promo,travelers,inject) work as in bugs.js.
 // The inject bug's syntax errors reach the error handler at the bottom
@@ -25,7 +33,10 @@ function trim(value) {
 }
 
 function bugOn(name) {
-  return (process.env.WEBUS_BUGS || '').split(',').map(function (flag) {
+  const env = process.env;
+  const flags = env.WEBUS_BUGS;
+  if (!flags) return false;
+  return flags.split(',').map(function (flag) {
     return flag.trim();
   }).indexOf(name) !== -1;
 }
@@ -90,7 +101,7 @@ router.post('/tickets/buy_ticket', function (req, res) {
     return s.destination === destination && s.date === schedule;
   })[0];
   const updatedSchedule = trip ? JSON.parse(JSON.stringify(trip)) : null;
-  if (trip) trip.travelers.push(name);
+  if (trip) { trip.travelers.push(name); }
   store.save();
   res.status(200).json({ createdTicket: ticket, updatedSchedule: updatedSchedule });
 });
